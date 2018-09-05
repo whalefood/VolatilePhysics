@@ -38,9 +38,9 @@ namespace Volatile
     // actual body's bounding box, as that will happen in the beginning of the
     // narrowphase test.
     void QueryOverlap(VoltAABB aabb, VoltBuffer<VoltBody> outBuffer);
-    void QueryPoint(Vector2 point, VoltBuffer<VoltBody> outBuffer);
-    void QueryCircle(Vector2 point, float radius, VoltBuffer<VoltBody> outBuffer);
+    void QueryPoint(TSVector2 point, VoltBuffer<VoltBody> outBuffer);
+    void QueryCircle(TSVector2 point, FP radius, VoltBuffer<VoltBody> outBuffer);
     void RayCast(ref VoltRayCast ray, VoltBuffer<VoltBody> outBuffer);
-    void CircleCast(ref VoltRayCast ray, float radius, VoltBuffer<VoltBody> outBuffer);
+    void CircleCast(ref VoltRayCast ray, FP radius, VoltBuffer<VoltBody> outBuffer);
   }
 }

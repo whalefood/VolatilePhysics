@@ -62,9 +62,9 @@ namespace Volatile
     public object UserData { get; set; }
     public VoltBody Body { get; private set; }
 
-    internal float Density { get; private set; }
-    internal float Friction { get; private set; }
-    internal float Restitution { get; private set; }
+    internal FP Density { get; private set; }
+    internal FP Friction { get; private set; }
+    internal FP Restitution { get; private set; }
 
     /// <summary>
     /// The world-space bounding AABB for this shape.
@@ -74,17 +74,17 @@ namespace Volatile
     /// <summary>
     /// Total area of the shape.
     /// </summary>
-    public float Area { get; protected set; }
+    public FP Area { get; protected set; }
 
     /// <summary>
     /// Total mass of the shape (area * density).
     /// </summary>
-    public float Mass { get; protected set; }
+    public FP Mass { get; protected set; }
 
     /// <summary>
     /// Total inertia of the shape relative to the body's origin.
     /// </summary>
-    public float Inertia { get; protected set; }
+    public FP Inertia { get; protected set; }
 
     // Body-space bounding AABB for pre-checks during queries/casts
     internal VoltAABB worldSpaceAABB;
@@ -108,7 +108,7 @@ namespace Volatile
     /// Checks if a point is contained in this shape. 
     /// Begins with an AABB check.
     /// </summary>
-    internal bool QueryPoint(Vector2 bodySpacePoint)
+    internal bool QueryPoint(TSVector2 bodySpacePoint)
     {
       // Queries and casts on shapes are always done in body space
       if (this.bodySpaceAABB.QueryPoint(bodySpacePoint))
@@ -120,7 +120,7 @@ namespace Volatile
     /// Checks if a circle overlaps with this shape. 
     /// Begins with an AABB check.
     /// </summary>
-    internal bool QueryCircle(Vector2 bodySpaceOrigin, float radius)
+    internal bool QueryCircle(TSVector2 bodySpaceOrigin, FP radius)
     {
       // Queries and casts on shapes are always done in body space
       if (this.bodySpaceAABB.QueryCircleApprox(bodySpaceOrigin, radius))
@@ -148,7 +148,7 @@ namespace Volatile
     /// </summary>
     internal bool CircleCast(
       ref VoltRayCast bodySpaceRay, 
-      float radius, 
+      FP radius, 
       ref VoltRayResult result)
     {
       // Queries and casts on shapes are always done in body space
@@ -159,9 +159,9 @@ namespace Volatile
     #endregion
 
     protected void Initialize(
-      float density, 
-      float friction, 
-      float restitution)
+      FP density, 
+      FP friction, 
+      FP restitution)
     {
       this.Density = density;
       this.Friction = friction;
@@ -200,11 +200,11 @@ namespace Volatile
 
     #region Test Overrides
     protected abstract bool ShapeQueryPoint(
-      Vector2 bodySpacePoint);
+      TSVector2 bodySpacePoint);
 
     protected abstract bool ShapeQueryCircle(
-      Vector2 bodySpaceOrigin,
-      float radius);
+      TSVector2 bodySpaceOrigin,
+      FP radius);
 
     protected abstract bool ShapeRayCast(
       ref VoltRayCast bodySpaceRay,
@@ -212,7 +212,7 @@ namespace Volatile
 
     protected abstract bool ShapeCircleCast(
       ref VoltRayCast bodySpaceRay,
-      float radius,
+      FP radius,
       ref VoltRayResult result);
     #endregion
 
@@ -223,7 +223,7 @@ namespace Volatile
       Color normalColor,
       Color originColor,
       Color aabbColor,
-      float normalLength);
+      FP normalLength);
 #endif
     #endregion
   }

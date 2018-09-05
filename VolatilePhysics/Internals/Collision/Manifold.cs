@@ -34,8 +34,8 @@ namespace Volatile
 
     internal VoltShape ShapeA { get; private set; }
     internal VoltShape ShapeB { get; private set; }
-    internal float Restitution { get; private set; }
-    internal float Friction { get; private set; }
+    internal FP Restitution { get; private set; }
+    internal FP Friction { get; private set; }
 
     private readonly Contact[] contacts;
     private int used = 0;
@@ -57,17 +57,17 @@ namespace Volatile
       this.ShapeA = shapeA;
       this.ShapeB = shapeB;
 
-      this.Restitution = Mathf.Sqrt(shapeA.Restitution * shapeB.Restitution);
-      this.Friction = Mathf.Sqrt(shapeA.Friction * shapeB.Friction);
+      this.Restitution = TSMath.Sqrt(shapeA.Restitution * shapeB.Restitution);
+      this.Friction = TSMath.Sqrt(shapeA.Friction * shapeB.Friction);
       this.used = 0;
 
       return this;
     }
 
     internal bool AddContact(
-      Vector2 position,
-      Vector2 normal,
-      float penetration)
+      TSVector2 position,
+      TSVector2 normal,
+      FP penetration)
     {
       if (this.used >= VoltConfig.MAX_CONTACTS)
         return false;

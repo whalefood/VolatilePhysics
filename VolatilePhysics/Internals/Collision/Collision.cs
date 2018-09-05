@@ -101,7 +101,7 @@ namespace Volatile
       VoltPolygon poly)
     {
       // Get the axis on the polygon closest to the circle's origin
-      float penetration;
+      FP penetration;
       int index =
         Collision.FindAxisMaxPenetration(
           circ.worldSpaceOrigin,
@@ -112,13 +112,13 @@ namespace Volatile
       if (index < 0)
         return null;
 
-      Vector2 a, b;
+      TSVector2 a, b;
       poly.GetEdge(index, out a, out b);
       Axis axis = poly.GetWorldAxis(index);
 
       // If the circle is past one of the two vertices, check it like
       // a circle-circle intersection where the vertex has radius 0
-      float d = VoltMath.Cross(axis.Normal, circ.worldSpaceOrigin);
+      FP d = VoltMath.Cross(axis.Normal, circ.worldSpaceOrigin);
       if (d > VoltMath.Cross(axis.Normal, a))
         return Collision.TestCircles(world, circ, poly, a, 0.0f);
       if (d < VoltMath.Cross(axis.Normal, b))
@@ -126,7 +126,7 @@ namespace Volatile
 
       // Build the collision Manifold
       Manifold manifold = world.AllocateManifold().Assign(world, circ, poly);
-      Vector2 pos =
+      TSVector2 pos =
         circ.worldSpaceOrigin - (circ.radius + penetration / 2) * axis.Normal;
       manifold.AddContact(pos, -axis.Normal, penetration);
       return manifold;
@@ -163,11 +163,11 @@ namespace Volatile
     /// Simple check for point-circle containment.
     /// </summary>
     internal static bool TestPointCircleSimple(
-      Vector2 point,
-      Vector2 origin,
-      float radius)
+      TSVector2 point,
+      TSVector2 origin,
+      FP radius)
     {
-      Vector2 delta = origin - point;
+      TSVector2 delta = origin - point;
       return delta.sqrMagnitude <= (radius * radius);
     }
 
@@ -175,12 +175,12 @@ namespace Volatile
     /// Simple check for two overlapping circles.
     /// </summary>
     internal static bool TestCircleCircleSimple(
-      Vector2 originA,
-      Vector2 originB,
-      float radiusA,
-      float radiusB)
+      TSVector2 originA,
+      TSVector2 originB,
+      FP radiusA,
+      FP radiusB)
     {
-      float radiusTotal = radiusA + radiusB;
+      FP radiusTotal = radiusA + radiusB;
       return (originA - originB).sqrMagnitude <= (radiusTotal * radiusTotal);
     }
 
@@ -189,12 +189,12 @@ namespace Volatile
     /// </summary>
     internal static bool CircleRayCast(
       VoltShape shape,
-      Vector2 shapeOrigin,
-      float sqrRadius,
+      TSVector2 shapeOrigin,
+      FP sqrRadius,
       ref VoltRayCast ray,
       ref VoltRayResult result)
     {
-      Vector2 toOrigin = shapeOrigin - ray.origin;
+      TSVector2 toOrigin = shapeOrigin - ray.origin;
 
       if (toOrigin.sqrMagnitude < sqrRadius)
       {
@@ -202,22 +202,22 @@ namespace Volatile
         return true;
       }
 
-      float slope = Vector2.Dot(toOrigin, ray.direction);
+      FP slope = TSVector2.Dot(toOrigin, ray.direction);
       if (slope < 0)
         return false;
 
-      float sqrSlope = slope * slope;
-      float d = sqrRadius + sqrSlope - Vector2.Dot(toOrigin, toOrigin);
+      FP sqrSlope = slope * slope;
+      FP d = sqrRadius + sqrSlope - TSVector2.Dot(toOrigin, toOrigin);
       if (d < 0)
         return false;
 
-      float dist = slope - Mathf.Sqrt(d);
+      FP dist = slope - TSMath.Sqrt(d);
       if (dist < 0 || dist > ray.distance)
         return false;
 
       // N.B.: For historical raycasts this normal will be wrong!
       // Must be either transformed back to world or invalidated later.
-      Vector2 normal = (dist * ray.direction - toOrigin).normalized;
+      TSVector2 normal = (dist * ray.direction - toOrigin).normalized;
       result.Set(shape, dist, normal);
       return true;
     }
@@ -228,18 +228,18 @@ namespace Volatile
     /// Outputs the minimum distance between the axis and the point.
     /// </summary>
     internal static int FindAxisShortestDistance(
-      Vector2 point,
+      TSVector2 point,
       Axis[] axes,
-      out float minDistance)
+      out FP minDistance)
     {
       int ix = 0;
-      minDistance = float.PositiveInfinity;
+      minDistance = FP.PositiveInfinity;
       bool inside = true;
 
       for (int i = 0; i < axes.Length; i++)
       {
-        float dot = Vector2.Dot(axes[i].Normal, point);
-        float dist = axes[i].Width - dot;
+        FP dot = TSVector2.Dot(axes[i].Normal, point);
+        FP dist = axes[i].Width - dot;
 
         if (dist < 0.0f)
           inside = false;
@@ -266,20 +266,20 @@ namespace Volatile
     /// Outputs the penetration depth of the circle in the axis (if any).
     /// </summary>
     internal static int FindAxisMaxPenetration(
-      Vector2 origin,
-      float radius,
+      TSVector2 origin,
+      FP radius,
       VoltPolygon poly,
-      out float penetration)
+      out FP penetration)
     {
       int index = 0;
       int found = 0;
-      penetration = float.NegativeInfinity;
+      penetration = FP.NegativeInfinity;
 
       for (int i = 0; i < poly.countWorld; i++)
       {
         Axis axis = poly.worldAxes[i];
-        float dot = Vector2.Dot(axis.Normal, origin);
-        float dist = dot - axis.Width - radius;
+        FP dot = TSVector2.Dot(axis.Normal, origin);
+        FP dist = dot - axis.Width - radius;
 
         if (dist > 0)
           return -1;
@@ -307,20 +307,20 @@ namespace Volatile
       VoltWorld world,
       VoltCircle shapeA,
       VoltShape shapeB,
-      Vector2 overrideBCenter, // For testing vertices in circles
-      float overrideBRadius)
+      TSVector2 overrideBCenter, // For testing vertices in circles
+      FP overrideBRadius)
     {
-      Vector2 r = overrideBCenter - shapeA.worldSpaceOrigin;
-      float min = shapeA.radius + overrideBRadius;
-      float distSq = r.sqrMagnitude;
+      TSVector2 r = overrideBCenter - shapeA.worldSpaceOrigin;
+      FP min = shapeA.radius + overrideBRadius;
+      FP distSq = r.sqrMagnitude;
 
       if (distSq >= min * min)
         return null;
 
-      float dist = Mathf.Sqrt(distSq);
-      float distInv = 1.0f / dist;
+      FP dist = TSMath.Sqrt(distSq);
+      FP distInv = 1.0f / dist;
 
-      Vector2 pos =
+      TSVector2 pos =
         shapeA.worldSpaceOrigin +
         (0.5f + distInv * (shapeA.radius - min / 2.0f)) * r;
 
@@ -336,16 +336,16 @@ namespace Volatile
       VoltPolygon poly2,
       out Axis axis)
     {
-      axis = new Axis(Vector2.zero, float.NegativeInfinity);
+      axis = new Axis(TSVector2.zero, FP.NegativeInfinity);
 
       for (int i = 0; i < poly1.countWorld; i++)
       {
         Axis a = poly1.worldAxes[i];
-        float min = float.PositiveInfinity;
+        FP min = FP.PositiveInfinity;
         for (int j = 0; j < poly2.countWorld; j++)
         {
-          Vector2 v = poly2.worldVertices[j];
-          min = Mathf.Min(min, Vector2.Dot(a.Normal, v));
+          TSVector2 v = poly2.worldVertices[j];
+          min = TSMath.Min(min, TSVector2.Dot(a.Normal, v));
         }
         min -= a.Width;
 
@@ -368,15 +368,15 @@ namespace Volatile
     private static void FindVerts(
       VoltPolygon poly1,
       VoltPolygon poly2,
-      Vector2 normal,
-      float penetration,
+      TSVector2 normal,
+      FP penetration,
       Manifold manifold)
     {
       bool found = false;
 
       for (int i = 0; i < poly1.countWorld; i++)
       {
-        Vector2 vertex = poly1.worldVertices[i];
+        TSVector2 vertex = poly1.worldVertices[i];
         if (poly2.ContainsPoint(vertex) == true)
         {
           if (manifold.AddContact(vertex, normal, penetration) == false)
@@ -387,7 +387,7 @@ namespace Volatile
 
       for (int i = 0; i < poly2.countWorld; i++)
       {
-        Vector2 vertex = poly2.worldVertices[i];
+        TSVector2 vertex = poly2.worldVertices[i];
         if (poly1.ContainsPoint(vertex) == true)
         {
           if (manifold.AddContact(vertex, normal, penetration) == false)
@@ -407,13 +407,13 @@ namespace Volatile
     private static void FindVertsFallback(
       VoltPolygon poly1,
       VoltPolygon poly2,
-      Vector2 normal,
-      float penetration,
+      TSVector2 normal,
+      FP penetration,
       Manifold manifold)
     {
       for (int i = 0; i < poly1.countWorld; i++)
       {
-        Vector2 vertex = poly1.worldVertices[i];
+        TSVector2 vertex = poly1.worldVertices[i];
         if (poly2.ContainsPointPartial(vertex, normal) == true)
           if (manifold.AddContact(vertex, normal, penetration) == false)
             return;
@@ -421,7 +421,7 @@ namespace Volatile
 
       for (int i = 0; i < poly2.countWorld; i++)
       {
-        Vector2 vertex = poly2.worldVertices[i];
+        TSVector2 vertex = poly2.worldVertices[i];
         if (poly1.ContainsPointPartial(vertex, -normal) == true)
           if (manifold.AddContact(vertex, normal, penetration) == false)
             return;

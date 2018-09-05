@@ -42,22 +42,22 @@ namespace Volatile
       get { return (this.shape == null) ? null : this.shape.Body; } 
     }
 
-    public float Distance { get { return this.distance; } }
-    public Vector2 Normal { get { return this.normal; } }
+    public FP Distance { get { return this.distance; } }
+    public TSVector2 Normal { get { return this.normal; } }
 
     private VoltShape shape;
-    private float distance;
-    internal Vector2 normal;
+    private FP distance;
+    internal TSVector2 normal;
 
-    public Vector2 ComputePoint(ref VoltRayCast cast)
+    public TSVector2 ComputePoint(ref VoltRayCast cast)
     {
       return cast.origin + (cast.direction * this.distance);
     }
 
     internal void Set(
       VoltShape shape,
-      float distance,
-      Vector2 normal)
+      FP distance,
+      TSVector2 normal)
     {
       if (this.IsValid == false || distance < this.distance)
       {
@@ -76,7 +76,7 @@ namespace Volatile
     {
       this.shape = shape;
       this.distance = 0.0f;
-      this.normal = Vector2.zero;
+      this.normal = TSVector2.zero;
     }
   }
 }

@@ -30,7 +30,7 @@ namespace Volatile
   public struct VoltAABB
   {
     #region Static Methods
-    public static VoltAABB CreateExpanded(VoltAABB aabb, float expansionAmount)
+    public static VoltAABB CreateExpanded(VoltAABB aabb, FP expansionAmount)
     {
       return new VoltAABB(
         aabb.top + expansionAmount,
@@ -42,18 +42,18 @@ namespace Volatile
     public static VoltAABB CreateMerged(VoltAABB aabb1, VoltAABB aabb2)
     {
       return new VoltAABB(
-        Mathf.Max(aabb1.top, aabb2.top),
-        Mathf.Min(aabb1.bottom, aabb2.bottom),
-        Mathf.Min(aabb1.left, aabb2.left),
-        Mathf.Max(aabb1.right, aabb2.right));
+        TSMath.Max(aabb1.top, aabb2.top),
+        TSMath.Min(aabb1.bottom, aabb2.bottom),
+        TSMath.Min(aabb1.left, aabb2.left),
+        TSMath.Max(aabb1.right, aabb2.right));
     }
 
-    public static VoltAABB CreateSwept(VoltAABB source, Vector2 vector)
+    public static VoltAABB CreateSwept(VoltAABB source, TSVector2 vector)
     {
-      float top = source.top;
-      float bottom = source.bottom;
-      float left = source.left;
-      float right = source.right;
+      FP top = source.top;
+      FP bottom = source.bottom;
+      FP left = source.left;
+      FP right = source.right;
 
       if (vector.x < 0.0f)
         left += vector.x;
@@ -74,22 +74,22 @@ namespace Volatile
     /// </summary>
     private static bool RayCast(
       ref VoltRayCast ray,
-      float top,
-      float bottom,
-      float left,
-      float right)
+      FP top,
+      FP bottom,
+      FP left,
+      FP right)
     {
-      float txmin =
+      FP txmin =
         ((ray.signX ? right : left) - ray.origin.x) *
         ray.invDirection.x;
-      float txmax =
+      FP txmax =
         ((ray.signX ? left : right) - ray.origin.x) *
         ray.invDirection.x;
 
-      float tymin =
+      FP tymin =
         ((ray.signY ? top : bottom) - ray.origin.y) *
         ray.invDirection.y;
-      float tymax =
+      FP tymax =
         ((ray.signY ? bottom : top) - ray.origin.y) *
         ray.invDirection.y;
 
@@ -103,56 +103,56 @@ namespace Volatile
     }
     #endregion
 
-    public Vector2 TopLeft 
+    public TSVector2 TopLeft 
     { 
-      get { return new Vector2(this.left, this.top); } 
+      get { return new TSVector2(this.left, this.top); } 
     }
 
-    public Vector2 TopRight 
+    public TSVector2 TopRight 
     { 
-      get { return new Vector2(this.right, this.top); } 
+      get { return new TSVector2(this.right, this.top); } 
     }
 
-    public Vector2 BottomLeft 
+    public TSVector2 BottomLeft 
     { 
-      get { return new Vector2(this.left, this.bottom); } 
+      get { return new TSVector2(this.left, this.bottom); } 
     }
 
-    public Vector2 BottomRight 
+    public TSVector2 BottomRight 
     { 
-      get { return new Vector2(this.right, this.bottom); } 
+      get { return new TSVector2(this.right, this.bottom); } 
     }
 
-    public float Top { get { return this.top; } }
-    public float Bottom { get { return this.bottom; } }
-    public float Left { get { return this.left; } }
-    public float Right { get { return this.right; } }
+    public FP Top { get { return this.top; } }
+    public FP Bottom { get { return this.bottom; } }
+    public FP Left { get { return this.left; } }
+    public FP Right { get { return this.right; } }
 
-    public float Width { get { return this.Right - this.Left; } }
-    public float Height { get { return this.Top - this.Bottom; } }
+    public FP Width { get { return this.Right - this.Left; } }
+    public FP Height { get { return this.Top - this.Bottom; } }
 
-    public float Area { get { return this.Width * this.Height; } }
-    public float Perimeter 
+    public FP Area { get { return this.Width * this.Height; } }
+    public FP Perimeter 
     { 
       get { return 2.0f * (this.Width + this.Height); } 
     }
 
-    public Vector2 Center { get { return this.ComputeCenter(); } }
-    public Vector2 Extent 
+    public TSVector2 Center { get { return this.ComputeCenter(); } }
+    public TSVector2 Extent 
     { 
-      get { return new Vector2(this.Width * 0.5f, this.Height * 0.5f); } 
+      get { return new TSVector2(this.Width * 0.5f, this.Height * 0.5f); } 
     }
 
-    private readonly float top;
-    private readonly float bottom;
-    private readonly float left;
-    private readonly float right;
+    private readonly FP top;
+    private readonly FP bottom;
+    private readonly FP left;
+    private readonly FP right;
 
     #region Tests
     /// <summary>
     /// Performs a point test on the AABB.
     /// </summary>
-    public bool QueryPoint(Vector2 point)
+    public bool QueryPoint(TSVector2 point)
     {
       return 
         this.left <= point.x && 
@@ -164,7 +164,7 @@ namespace Volatile
     /// <summary>
     /// Note: This doesn't take rounded edges into account.
     /// </summary>
-    public bool QueryCircleApprox(Vector2 origin, float radius)
+    public bool QueryCircleApprox(TSVector2 origin, FP radius)
     {
       return
         (this.left - radius) <= origin.x &&
@@ -186,7 +186,7 @@ namespace Volatile
     /// <summary>
     /// Note: This doesn't take rounded edges into account.
     /// </summary>
-    public bool CircleCastApprox(ref VoltRayCast ray, float radius)
+    public bool CircleCastApprox(ref VoltRayCast ray, FP radius)
     {
       return VoltAABB.RayCast(
         ref ray,
@@ -216,7 +216,7 @@ namespace Volatile
     }
     #endregion
 
-    public VoltAABB(float top, float bottom, float left, float right)
+    public VoltAABB(FP top, FP bottom, FP left, FP right)
     {
       this.top = top;
       this.bottom = bottom;
@@ -224,10 +224,10 @@ namespace Volatile
       this.right = right;
     }
 
-    public VoltAABB(Vector2 center, Vector2 extents)
+    public VoltAABB(TSVector2 center, TSVector2 extents)
     {
-      Vector2 topRight = center + extents;
-      Vector2 bottomLeft = center - extents;
+      TSVector2 topRight = center + extents;
+      TSVector2 bottomLeft = center - extents;
 
       this.top = topRight.y;
       this.right = topRight.x;
@@ -235,34 +235,34 @@ namespace Volatile
       this.left = bottomLeft.x;
     }
 
-    public VoltAABB(Vector2 center, float radius)
-      : this (center, new Vector2(radius, radius))
+    public VoltAABB(TSVector2 center, FP radius)
+      : this (center, new TSVector2(radius, radius))
     {
     }
 
-    public VoltAABB ComputeTopLeft(Vector2 center)
+    public VoltAABB ComputeTopLeft(TSVector2 center)
     {
       return new VoltAABB(this.top, center.y, this.left, center.x);
     }
 
-    public VoltAABB ComputeTopRight(Vector2 center)
+    public VoltAABB ComputeTopRight(TSVector2 center)
     {
       return new VoltAABB(this.top, center.y, center.x, this.right);
     }
 
-    public VoltAABB ComputeBottomLeft(Vector2 center)
+    public VoltAABB ComputeBottomLeft(TSVector2 center)
     {
       return new VoltAABB(center.y, this.bottom, this.left, center.x);
     }
 
-    public VoltAABB ComputeBottomRight(Vector2 center)
+    public VoltAABB ComputeBottomRight(TSVector2 center)
     {
       return new VoltAABB(center.y, this.bottom, center.x, this.right);
     }
 
-    private Vector2 ComputeCenter()
+    private TSVector2 ComputeCenter()
     {
-      return new Vector2(
+      return new TSVector2(
         (this.Width * 0.5f) + this.left, 
         (this.Height * 0.5f) + this.bottom);
     }

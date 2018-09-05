@@ -38,8 +38,8 @@ namespace Volatile
   internal struct HistoryRecord
   {
     internal VoltAABB aabb;
-    internal Vector2 position;
-    internal Vector2 facing;
+    internal TSVector2 position;
+    internal TSVector2 facing;
 
     internal void Store(ref HistoryRecord other)
     {
@@ -49,12 +49,12 @@ namespace Volatile
     }
 
     #region World-Space to Body-Space Transformations
-    internal Vector2 WorldToBodyPoint(Vector2 vector)
+    internal TSVector2 WorldToBodyPoint(TSVector2 vector)
     {
       return VoltMath.WorldToBodyPoint(this.position, this.facing, vector);
     }
 
-    internal Vector2 WorldToBodyDirection(Vector2 vector)
+    internal TSVector2 WorldToBodyDirection(TSVector2 vector)
     {
       return VoltMath.WorldToBodyDirection(this.facing, vector);
     }
@@ -69,20 +69,20 @@ namespace Volatile
     #endregion
 
     #region Body-Space to World-Space Transformations
-    internal Vector2 BodyToWorldPoint(Vector2 vector)
+    internal TSVector2 BodyToWorldPoint(TSVector2 vector)
     {
       return VoltMath.BodyToWorldPoint(this.position, this.facing, vector);
     }
 
-    internal Vector2 BodyToWorldDirection(Vector2 vector)
+    internal TSVector2 BodyToWorldDirection(TSVector2 vector)
     {
       return VoltMath.BodyToWorldDirection(this.facing, vector);
     }
 
     internal Axis BodyToWorldAxis(Axis axis)
     {
-      Vector2 normal = axis.Normal.Rotate(this.facing);
-      float width = Vector2.Dot(normal, this.position) + axis.Width;
+      TSVector2 normal = axis.Normal.Rotate(this.facing);
+      FP width = TSVector2.Dot(normal, this.position) + axis.Width;
       return new Axis(normal, width);
     }
     #endregion

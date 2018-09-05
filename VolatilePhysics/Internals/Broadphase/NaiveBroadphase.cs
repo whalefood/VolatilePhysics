@@ -79,15 +79,15 @@ namespace Volatile
     }
 
     public void QueryPoint(
-      Vector2 point,
+      TSVector2 point,
       VoltBuffer<VoltBody> outBuffer)
     {
       outBuffer.Add(this.bodies, this.count);
     }
 
     public void QueryCircle(
-      Vector2 point,
-      float radius,
+      TSVector2 point,
+      FP radius,
       VoltBuffer<VoltBody> outBuffer)
     {
       outBuffer.Add(this.bodies, this.count);
@@ -102,7 +102,7 @@ namespace Volatile
 
     public void CircleCast(
       ref VoltRayCast ray,
-      float radius,
+      FP radius,
       VoltBuffer<VoltBody> outBuffer)
     {
       outBuffer.Add(this.bodies, this.count);

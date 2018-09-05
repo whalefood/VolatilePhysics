@@ -29,7 +29,7 @@ namespace Volatile
   public delegate void VoltExplosionCallback(
     VoltRayCast rayCast,
     VoltRayResult rayResult,
-    float rayWeight);
+    FP rayWeight);
 
   public partial class VoltWorld
   {
@@ -37,14 +37,14 @@ namespace Volatile
     // This way, if an occluder is also a target, we will catch that target
     // within the occluder range. Also allows us to handle the case where the
     // explosion origin is within both targets' and occluders' shapes.
-    private const float EXPLOSION_OCCLUDER_SLOP = 0.05f;
+    private static FP EXPLOSION_OCCLUDER_SLOP = 0.05f;
 
     private VoltBuffer<VoltBody> targetBodies;
     private VoltBuffer<VoltBody> occludingBodies;
 
     public void PerformExplosion(
-      Vector2 origin,
-      float radius,
+      TSVector2 origin,
+      FP radius,
       VoltExplosionCallback callback,
       VoltBodyFilter targetFilter = null,
       VoltBodyFilter occlusionFilter = null,
@@ -71,15 +71,15 @@ namespace Volatile
         ref this.occludingBodies);
 
       VoltRayCast ray;
-      float rayWeight = 1.0f / rayCount;
-      float angleIncrement = (Mathf.PI * 2.0f) * rayWeight;
+      FP rayWeight = 1.0f / rayCount;
+      FP angleIncrement = (TSMath.Pi * 2.0f) * rayWeight;
 
       for (int i = 0; i < rayCount; i++)
       {
-        Vector2 normal = VoltMath.Polar(angleIncrement * i);
+        TSVector2 normal = VoltMath.Polar(angleIncrement * i);
         ray = new VoltRayCast(origin, normal, radius);
 
-        float minDistance = 
+        FP minDistance = 
           this.GetOccludingDistance(ray, ticksBehind);
         minDistance += VoltWorld.EXPLOSION_OCCLUDER_SLOP;
 
@@ -90,11 +90,11 @@ namespace Volatile
     /// <summary>
     /// Gets the distance to the closest occluder for the given ray.
     /// </summary>
-    private float GetOccludingDistance(
+    private FP GetOccludingDistance(
       VoltRayCast ray,
       int ticksBehind)
     {
-      float distance = float.MaxValue;
+      FP distance = FP.MaxValue;
       VoltRayResult result = default(VoltRayResult);
 
       for (int i = 0; i < this.occludingBodies.Count; i++)
@@ -115,8 +115,8 @@ namespace Volatile
       VoltRayCast ray,
       VoltExplosionCallback callback,
       int ticksBehind,
-      float minOccluderDistance,
-      float rayWeight)
+      FP minOccluderDistance,
+      FP rayWeight)
     {
       for (int i = 0; i < this.targetBodies.Count; i++)
       {
@@ -134,8 +134,8 @@ namespace Volatile
     /// and pass the target filter test. Does not test actual shapes.
     /// </summary>
     private void PopulateFiltered(
-      Vector2 origin,
-      float radius,
+      TSVector2 origin,
+      FP radius,
       VoltBodyFilter targetFilter,
       int ticksBehind,
       ref VoltBuffer<VoltBody> filterBuffer)

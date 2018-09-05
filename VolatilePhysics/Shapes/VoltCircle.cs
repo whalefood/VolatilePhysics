@@ -31,11 +31,11 @@ namespace Volatile
   {
     #region Factory Functions
     internal void InitializeFromWorldSpace(
-      Vector2 worldSpaceOrigin, 
-      float radius,
-      float density,
-      float friction,
-      float restitution)
+      TSVector2 worldSpaceOrigin, 
+      FP radius,
+      FP density,
+      FP friction,
+      FP restitution)
     {
       base.Initialize(density, friction, restitution);
 
@@ -49,18 +49,18 @@ namespace Volatile
     #region Properties
     public override VoltShape.ShapeType Type { get { return ShapeType.Circle; } }
 
-    public Vector2 Origin { get { return this.worldSpaceOrigin; } }
-    public float Radius { get { return this.radius; } }
+    public TSVector2 Origin { get { return this.worldSpaceOrigin; } }
+    public FP Radius { get { return this.radius; } }
     #endregion
 
     #region Fields
-    internal Vector2 worldSpaceOrigin;
-    internal float radius;
-    internal float sqrRadius;
+    internal TSVector2 worldSpaceOrigin;
+    internal FP radius;
+    internal FP sqrRadius;
 
     // Precomputed body-space values (these should never change unless we
     // want to support moving shapes relative to their body root later on)
-    private Vector2 bodySpaceOrigin;
+    private TSVector2 bodySpaceOrigin;
     #endregion
 
     public VoltCircle() 
@@ -72,10 +72,10 @@ namespace Volatile
     {
       base.Reset();
 
-      this.worldSpaceOrigin = Vector2.zero;
+      this.worldSpaceOrigin = TSVector2.zero;
       this.radius = 0.0f;
       this.sqrRadius = 0.0f;
-      this.bodySpaceOrigin = Vector2.zero;
+      this.bodySpaceOrigin = TSVector2.zero;
     }
 
     #region Functionality Overrides
@@ -85,7 +85,7 @@ namespace Volatile
         this.Body.WorldToBodyPointCurrent(this.worldSpaceOrigin);
       this.bodySpaceAABB = new VoltAABB(this.bodySpaceOrigin, this.radius);
 
-      this.Area = this.sqrRadius * Mathf.PI;
+      this.Area = this.sqrRadius * TSMath.Pi;
       this.Mass = this.Area * this.Density * VoltConfig.AreaMassRatio;
       this.Inertia =
         this.sqrRadius / 2.0f + this.bodySpaceOrigin.sqrMagnitude;
@@ -101,7 +101,7 @@ namespace Volatile
 
     #region Test Overrides
     protected override bool ShapeQueryPoint(
-      Vector2 bodySpacePoint)
+      TSVector2 bodySpacePoint)
     {
       return 
         Collision.TestPointCircleSimple(
@@ -111,8 +111,8 @@ namespace Volatile
     }
 
     protected override bool ShapeQueryCircle(
-      Vector2 bodySpaceOrigin, 
-      float radius)
+      TSVector2 bodySpaceOrigin, 
+      FP radius)
     {
       return 
         Collision.TestCircleCircleSimple(
@@ -136,10 +136,10 @@ namespace Volatile
 
     protected override bool ShapeCircleCast(
       ref VoltRayCast bodySpaceRay, 
-      float radius,
+      FP radius,
       ref VoltRayResult result)
     {
-      float totalRadius = this.radius + radius;
+      FP totalRadius = this.radius + radius;
       return Collision.CircleRayCast(
         this,
         this.bodySpaceOrigin,
@@ -156,7 +156,7 @@ namespace Volatile
       Color normalColor, 
       Color originColor, 
       Color aabbColor, 
-      float normalLength)
+      FP normalLength)
     {
       Color current = Gizmos.color;
 
