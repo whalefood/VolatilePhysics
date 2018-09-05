@@ -32,6 +32,10 @@ SOFTWARE.
 
 using System;
 
+#if UNITY
+using UnityEngine;
+#endif
+
 namespace Volatile {
     
 
@@ -126,7 +130,17 @@ namespace Volatile {
 
         #endregion Constructors
 
+#if UNITY
+        public Vector2 ToVector2()
+        {
+            return new Vector2((float)this.x, (float)this.y);
+        }
+        
+#endif
+
         #region Public Methods
+
+
 
         public static void Reflect(ref TSVector2 vector, ref TSVector2 normal, out TSVector2 result)
         {

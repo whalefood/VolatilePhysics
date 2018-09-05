@@ -1,6 +1,10 @@
 ﻿using System;
 using System.IO;
 
+#if UNITY
+using UnityEngine;
+#endif
+
 namespace Volatile {
 
     /// <summary>
@@ -753,6 +757,11 @@ namespace Volatile {
 
         public FP AsFP() {
             return (FP) this;
+        }
+
+        public float AsFloat()
+        {
+            return (float)this;
         }
 
         public int AsInt() {

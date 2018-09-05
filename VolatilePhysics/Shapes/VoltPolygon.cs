@@ -548,20 +548,20 @@ namespace Volatile
 
       for (int i = 0; i < this.countWorld; i++)
       {
-        Vector2 u = this.worldVertices[i];
-        Vector2 v = this.worldVertices[(i + 1) % this.countWorld];
-        Vector2 n = worldAxes[i].Normal;
+        TSVector2 u = this.worldVertices[i];
+        TSVector2 v = this.worldVertices[(i + 1) % this.countWorld];
+        TSVector2 n = worldAxes[i].Normal;
 
-        Vector2 delta = v - u;
-        Vector2 midPoint = u + (delta * 0.5f);
+        TSVector2 delta = v - u;
+        TSVector2 midPoint = u + (delta * 0.5f);
 
         // Draw edge
         Gizmos.color = edgeColor;
-        Gizmos.DrawLine(u, v);
+        Gizmos.DrawLine(u.ToVector2(), v.ToVector2());
 
         // Draw normal
         Gizmos.color = normalColor;
-        Gizmos.DrawLine(midPoint, midPoint + (n * normalLength));
+        Gizmos.DrawLine(midPoint.ToVector2(), (midPoint + (n * normalLength)).ToVector2());
       }
 
       this.AABB.GizmoDraw(aabbColor);

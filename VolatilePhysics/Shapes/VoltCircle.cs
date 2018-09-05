@@ -161,7 +161,7 @@ namespace Volatile
       Color current = Gizmos.color;
 
       Gizmos.color = edgeColor;
-      Gizmos.DrawWireSphere(this.worldSpaceOrigin, this.radius);
+      Gizmos.DrawWireSphere(this.worldSpaceOrigin.ToVector2(), this.radius.AsFloat());
 
       this.AABB.GizmoDraw(aabbColor);
 

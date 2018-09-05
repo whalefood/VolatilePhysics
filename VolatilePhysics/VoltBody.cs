@@ -680,13 +680,13 @@ namespace Volatile
 
       // Draw origin
       Gizmos.color = bodyOriginColor;
-      Gizmos.DrawWireSphere(this.Position, 0.1f);
+      Gizmos.DrawWireSphere(this.Position.ToVector2(), 0.1f);
 
       // Draw facing
       Gizmos.color = normalColor;
       Gizmos.DrawLine(
-        this.Position,
-        this.Position + this.Facing * normalLength);
+        this.Position.ToVector2(),
+        (this.Position + this.Facing * normalLength).ToVector2());
 
       this.AABB.GizmoDraw(bodyAabbColor);
 

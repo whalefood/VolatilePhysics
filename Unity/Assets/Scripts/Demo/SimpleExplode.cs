@@ -7,10 +7,10 @@ using Volatile;
 public class SimpleExplode : MonoBehaviour
 {
   [SerializeField]
-  private float radius;
+  private FP radius;
 
   [SerializeField]
-  private float forceMax;
+  private FP forceMax;
 
   [SerializeField]
   private int rayCount;
@@ -18,13 +18,13 @@ public class SimpleExplode : MonoBehaviour
   [SerializeField]
   private VolatileBody body;
 
-  private List<Vector2> hits;
-  private Vector2 lastOrigin;
-  private float showDelay;
+  private List<TSVector2> hits;
+  private TSVector2 lastOrigin;
+  private FP showDelay;
 
   void Awake()
   {
-    this.hits = new List<Vector2>();
+        this.hits = new List<TSVector2>();
   }
 
   void Update()
@@ -32,7 +32,7 @@ public class SimpleExplode : MonoBehaviour
     if (Input.GetKeyDown(KeyCode.E))
     {
       this.hits.Clear();
-      this.lastOrigin = this.transform.position;
+      this.lastOrigin = this.transform.position.ToTSVector2();
       this.showDelay = Time.time + 0.2f;
 
       VolatileWorld.Instance.World.PerformExplosion(
@@ -47,16 +47,16 @@ public class SimpleExplode : MonoBehaviour
   private void ExplosionCallback(
     VoltRayCast rayCast,
     VoltRayResult rayResult,
-    float rayWeight)
+    FP rayWeight)
   {
-    Vector2 point = rayResult.ComputePoint(ref rayCast);
+    TSVector2 point = rayResult.ComputePoint(ref rayCast);
     this.hits.Add(point);
   }
 
   void OnDrawGizmos()
   {
     if (Application.isPlaying && (Time.time < showDelay))
-      foreach (Vector2 hit in this.hits)
-        Gizmos.DrawLine(this.lastOrigin, hit);
+      foreach (var hit in this.hits)
+        Gizmos.DrawLine(this.lastOrigin.ToVector2(), hit.ToVector2());
   }
 }

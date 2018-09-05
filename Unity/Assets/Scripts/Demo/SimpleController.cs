@@ -37,8 +37,8 @@ public class SimpleController : MonoBehaviour
       this.body.AddTorque(-turn * 0.03f);
 
       // Stabilize
-      float angVel = this.body.Body.AngularVelocity;
-      float inertia = this.body.Body.Inertia;
+      float angVel = (float)this.body.Body.AngularVelocity;
+      float inertia = (float)this.body.Body.Inertia;
       float correction =
         (angVel * inertia) / Time.fixedDeltaTime;
 

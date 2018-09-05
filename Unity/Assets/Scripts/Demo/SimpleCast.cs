@@ -34,8 +34,8 @@ public class SimpleCast : MonoBehaviour
       VoltRayResult result = new VoltRayResult();
       VoltRayCast cast =
         new VoltRayCast(
-          transform.position,
-          transform.position + (transform.up * 100.0f));
+          ((Vector2)transform.position).ToTSVector2(),
+          ((Vector2)(transform.position + (transform.up * 100.0f))).ToTSVector2());
 
       if (this.radius > 0.0f)
         world.World.CircleCast(ref cast, this.radius, ref result, this.Filter, -this.frameOffset);
@@ -46,7 +46,7 @@ public class SimpleCast : MonoBehaviour
       Gizmos.color = this.color;
       if (result.IsValid == true)
       {
-        Vector2 point = transform.position + (transform.up * result.Distance);
+        Vector2 point = transform.position + (transform.up * (float)result.Distance);
         Gizmos.DrawLine(transform.position, point);
         Gizmos.DrawWireSphere(point,drawRadius);
       }

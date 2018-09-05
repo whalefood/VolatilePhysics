@@ -21,18 +21,18 @@ public class VolatileBody : MonoBehaviour
   public VoltBody Body { get { return this.body; } }
   private VoltBody body;
 
-  private Vector2 lastPosition;
-  private Vector2 nextPosition;
+  private TSVector2 lastPosition;
+  private TSVector2 nextPosition;
 
-  private float lastAngle;
-  private float nextAngle;
+  private FP lastAngle;
+  private FP nextAngle;
 
   void Awake()
   {
     VoltWorld world = VolatileWorld.Instance.World;
     IEnumerable<VoltShape> shapes = this.shapes.Select((s) => s.PrepareShape(world));
 
-    Vector2 position = transform.position;
+    TSVector2 position = transform.position.ToTSVector2();
     float radians = Mathf.Deg2Rad * transform.eulerAngles.z;
 
     if (this.isStatic == true)
@@ -40,7 +40,7 @@ public class VolatileBody : MonoBehaviour
     else
       this.body = world.CreateDynamicBody(position, radians, shapes.ToArray());
 
-    this.lastPosition = this.nextPosition = transform.position;
+    this.lastPosition = this.nextPosition = position;
     this.lastAngle = this.nextAngle = transform.eulerAngles.z;
   }
 
@@ -51,20 +51,20 @@ public class VolatileBody : MonoBehaviour
       if (this.doSmoothing)
       {
         float t = (Time.time - Time.fixedTime) / Time.deltaTime;
-        transform.position = Vector2.Lerp(this.lastPosition, this.nextPosition, t);
-        float angle = Mathf.LerpAngle(this.lastAngle, this.nextAngle, t);
+        transform.position = TSVector2.Lerp(this.lastPosition, this.nextPosition, (FP)t).ToVector2();
+        float angle = (float)TSMath.Lerp(this.lastAngle, this.nextAngle, t);
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Rad2Deg * angle);
       }
       else
       {
-        transform.position = this.body.Position;
-        transform.rotation = Quaternion.Euler(0.0f, 0.0f, Mathf.Rad2Deg * this.body.Angle);
+        transform.position = this.body.Position.ToVector2();
+                transform.rotation = Quaternion.Euler(0.0f, 0.0f, (float)(Mathf.Rad2Deg * this.body.Angle));
       }
     }
     else
     {
       this.body.Set(
-        this.transform.position, 
+        this.transform.position.ToTSVector2(), 
         Mathf.Deg2Rad * this.transform.rotation.eulerAngles.z);
     }
   }
@@ -119,7 +119,7 @@ public class VolatileBody : MonoBehaviour
     Gizmos.color = current;
   }
 
-  public void AddForce(Vector2 force)
+  public void AddForce(TSVector2 force)
   {
     this.body.AddForce(force);
   }
@@ -129,7 +129,7 @@ public class VolatileBody : MonoBehaviour
     this.body.AddTorque(radians);
   }
 
-  public void Set(Vector2 position, float radians)
+  public void Set(TSVector2 position, float radians)
   {
     this.body.Set(position, radians);
   }

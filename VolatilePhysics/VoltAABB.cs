@@ -273,10 +273,10 @@ namespace Volatile
     {
       Color current = Gizmos.color;
 
-      Vector2 A = new Vector2(this.Left, this.Top);
-      Vector2 B = new Vector2(this.Right, this.Top);
-      Vector2 C = new Vector2(this.Right, this.Bottom);
-      Vector2 D = new Vector2(this.Left, this.Bottom);
+      Vector2 A = new TSVector2(this.Left, this.Top).ToVector2();
+      Vector2 B = new TSVector2(this.Right, this.Top).ToVector2();
+      Vector2 C = new TSVector2(this.Right, this.Bottom).ToVector2();
+      Vector2 D = new TSVector2(this.Left, this.Bottom).ToVector2();
 
       Gizmos.color = aabbColor;
       Gizmos.DrawLine(A, B);
