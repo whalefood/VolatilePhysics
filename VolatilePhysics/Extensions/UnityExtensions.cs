@@ -1,6 +1,9 @@
 ﻿
 using System.Reflection;
+
+#if UNITY
 using UnityEngine;
+#endif
 
 namespace Volatile
 {
@@ -11,6 +14,7 @@ namespace Volatile
     public static class VolatileUnityExtensions
     {
 
+#if UNITY
         public static TSVector ToTSVector(this Vector3 vector)
         {
             return new TSVector(vector.x, vector.y, vector.z);
@@ -70,5 +74,7 @@ namespace Volatile
         {
             return TSQuaternion.CreateFromMatrix(jMatrix).ToQuaternion();
         }
+
+#endif
     }
 }

@@ -74,6 +74,7 @@
     <Compile Include="Math\TSRandom.cs" />
     <Compile Include="Math\TSVector.cs" />
     <Compile Include="Math\TSVector2.cs" />
+    <Compile Include="Extensions\UnityExtensions.cs" />
     <Compile Include="Util\Debug\VoltDebug.cs" />
     <Compile Include="Util\Pooling\IVoltPoolable.cs" />
     <Compile Include="Util\Pooling\VoltPool.cs" />

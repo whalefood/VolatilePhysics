@@ -518,7 +518,7 @@ namespace Volatile {
         }
 
         public override string ToString() {
-            return string.Format("({0:f4}, {1:f4})", x.AsFP(), y.AsFP());
+            return string.Format("({0:f4}, {1:f4})", x.AsFloat(), y.AsFloat());
         }
 
         public string ToRawString()

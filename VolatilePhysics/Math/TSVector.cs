@@ -208,7 +208,7 @@ namespace Volatile
         /// <returns>A string containing all three components.</returns>
         #region public override string ToString()
         public override string ToString() {
-            return string.Format("({0:f1}, {1:f1}, {2:f1})", x.AsFP(), y.AsFP(), z.AsFP());
+            return string.Format("({0:f1}, {1:f1}, {2:f1})", x.AsFloat(), y.AsFloat(), z.AsFloat());
         }
         #endregion
 
