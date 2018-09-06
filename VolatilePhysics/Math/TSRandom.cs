@@ -91,7 +91,7 @@ namespace Volatile {
         /**
          *  @brief Returns a {@link FP} between a min value [inclusive] and a max value [inclusive].
          **/
-        public FP Next(FP minValue, FP maxValue) {
+        public FP Next(float minValue, float maxValue) {
             int minValueInt = (int)(minValue * 1000), maxValueInt = (int)(maxValue * 1000);
 
             if (minValueInt > maxValueInt) {
@@ -114,7 +114,7 @@ namespace Volatile {
         /**
          *  @brief Returns a {@link FP} between a min value [inclusive] and a max value [inclusive].
          **/
-        public static FP Range(FP minValue, FP maxValue) {
+        public static FP Range(float minValue, float maxValue) {
             return instance.Next(minValue, maxValue);
         }
 
@@ -143,19 +143,19 @@ namespace Volatile {
             }
         }
 
-       /* private FP NextFP() {
-            return (FP)genrand_real2();
-        }*/
-
-        private FP NextFP(bool includeOne) {
-            if (includeOne) {
-                return (FP)genrand_real1();
-            }
-            return (FP)genrand_real2();
+        private float NextFloat() {
+            return (float)genrand_real2();
         }
 
-        private FP NextFPPositive() {
-            return (FP)genrand_real3();
+        private float NextFloat(bool includeOne) {
+            if (includeOne) {
+                return (float)genrand_real1();
+            }
+            return (float)genrand_real2();
+        }
+
+        private float NextFloatPositive() {
+            return (float)genrand_real3();
         }
 
         private double NextDouble() {

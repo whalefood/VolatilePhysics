@@ -515,7 +515,7 @@ namespace Volatile
         }
 
         public override string ToString() {
-            return string.Format("({0:f1}, {1:f1}, {2:f1}, {3:f1})", x.AsFP(), y.AsFP(), z.AsFP(), w.AsFP());
+            return string.Format("({0:f1}, {1:f1}, {2:f1}, {3:f1})", x.AsFloat(), y.AsFloat(), z.AsFloat(), w.AsFloat());
         }
 
     }

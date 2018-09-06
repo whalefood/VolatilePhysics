@@ -171,6 +171,7 @@ namespace Volatile {
         /// Adds x and y witout performing overflow checking. Should be inlined by the CLR.
         /// </summary>
         public static FP FastAdd(FP x, FP y) {
+
             return new FP(x._serializedValue + y._serializedValue);
         }
 
@@ -179,7 +180,11 @@ namespace Volatile {
         /// rounds to MinValue or MaxValue depending on sign of operands.
         /// </summary>
         public static FP operator -(FP x, FP y) {
-            return new FP(x._serializedValue - y._serializedValue);
+            var sum = x._serializedValue - y._serializedValue;
+            FP result;
+            result._serializedValue = sum;
+            return result;
+           // return new FP(x._serializedValue - y._serializedValue);
         }
 
         /// <summary>
@@ -727,13 +732,13 @@ namespace Volatile {
             return value._serializedValue >> FRACTIONAL_PLACES;
         }
 
-       /* public static implicit operator FP(FP value) {
+        public static implicit operator FP(float value) {
             return new FP((long)(value * ONE));
         }
 
-        public static explicit operator FP(FP value) {
-            return (FP)value._serializedValue / ONE;
-        }*/
+        public static explicit operator float(FP value) {
+            return (float)value._serializedValue / ONE;
+        }
 
         public static implicit operator FP(double value) {
             return new FP((long)(value * ONE));
@@ -755,13 +760,8 @@ namespace Volatile {
             return (decimal)value._serializedValue / ONE;
         }
 
-        public FP AsFP() {
-            return (FP) this;
-        }
-
-        public float AsFloat()
-        {
-            return (float)this;
+        public float AsFloat() {
+            return (float) this;
         }
 
         public int AsInt() {
@@ -780,15 +780,15 @@ namespace Volatile {
             return (decimal)this;
         }
 
-        public static FP ToFP(FP value) {
-            return (FP)value;
+        public static float ToFloat(FP value) {
+            return (float)value;
         }
 
         public static int ToInt(FP value) {
             return (int)value;
         }
 
-        public static FP FromFP(FP value) {
+        public static FP FromFloat(float value) {
             return (FP)value;
         }
 
@@ -817,7 +817,7 @@ namespace Volatile {
         }
 
         public override string ToString() {
-            return ((FP)this).ToString();
+            return ((float)this).ToString();
         }
 
         public static FP FromRaw(long rawValue) {
@@ -832,12 +832,12 @@ namespace Volatile {
         public static readonly long[] AcosLut = new[] {");
                 int lineCounter = 0;
                 for (int i = 0; i < LUT_SIZE; ++i) {
-                    var angle = i / ((FP)(LUT_SIZE - 1));
+                    var angle = i / ((float)(LUT_SIZE - 1));
                     if (lineCounter++ % 8 == 0) {
                         writer.WriteLine();
                         writer.Write("            ");
                     }
-                    var acos = Math.Acos((double)angle);
+                    var acos = Math.Acos(angle);
                     var rawValue = ((FP)acos)._serializedValue;
                     writer.Write(string.Format("0x{0:X}L, ", rawValue));
                 }

@@ -557,7 +557,7 @@ namespace Volatile
 
         // Draw edge
         Gizmos.color = edgeColor;
-        Gizmos.DrawLine(u.ToVector2(), v.ToVector2());
+        Gizmos.DrawLine(u.ToVector(), v.ToVector());
 
         // Draw normal
         Gizmos.color = normalColor;

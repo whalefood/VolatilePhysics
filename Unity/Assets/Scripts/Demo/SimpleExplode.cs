@@ -57,6 +57,6 @@ public class SimpleExplode : MonoBehaviour
   {
     if (Application.isPlaying && (Time.time < showDelay))
       foreach (var hit in this.hits)
-        Gizmos.DrawLine(this.lastOrigin.ToVector2(), hit.ToVector2());
+        Gizmos.DrawLine(this.lastOrigin.ToVector(), hit.ToVector());
   }
 }

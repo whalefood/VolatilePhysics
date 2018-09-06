@@ -53,10 +53,10 @@ namespace Volatile
 
     private static void Log(object message, ConsoleColor color)
     {
-      ConsoleColor current = Console.ForegroundColor;
-      Console.ForegroundColor = color;
+      //ConsoleColor current = Console.ForegroundColor;
+      //Console.ForegroundColor = color;
       Console.WriteLine(message);
-      Console.ForegroundColor = current;
+      //Console.ForegroundColor = current;
     }
   }
 
